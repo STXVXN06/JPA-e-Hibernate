@@ -21,7 +21,7 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
     List<Object[]> obtenerPersonData();
     
     @Query("select p.name, p.programmingLanguage from Person p where p.programmingLanguage=?1 and p.name=?2")
-    List<Object[]> obtenerPersonDataWhere(String pLanguage, String name);
+    List<Object[]> obtenerPersonData(String pLanguage, String name);
 
 
 }

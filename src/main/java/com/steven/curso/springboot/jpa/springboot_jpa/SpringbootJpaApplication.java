@@ -31,7 +31,7 @@ public class SpringbootJpaApplication implements CommandLineRunner {
 		List<Object[]> personData = (List<Object[]>) repository.obtenerPersonData();	
 		personData.stream().forEach(person -> System.out.println(person[0] + " es experto en "+ person[1]));	
 	
-		List<Object[]> personDataWhere = (List<Object[]>) repository.obtenerPersonDataWhere("C#","Emily");	
+		List<Object[]> personDataWhere = (List<Object[]>) repository.obtenerPersonData("C#","Emily");	
 		personDataWhere.stream().forEach(person -> System.out.println(person[0] + " es experto en "+ person[1]));	
 	}
 
