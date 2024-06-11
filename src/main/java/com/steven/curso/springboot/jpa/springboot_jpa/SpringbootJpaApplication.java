@@ -29,14 +29,55 @@ public class SpringbootJpaApplication implements CommandLineRunner {
 		// findOne();
 		// list();
 		// create();
-		update();
+		// update();
+		// deleteById();
+		delete2();
+	}
 
+	@Transactional
+	public void delete2(){
+		list();
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Ingrese el ID del registro a eliminar");
+		Long id = scanner.nextLong();
+		Optional<Person> optionalPerson = repository.findById(id);
+		optionalPerson.ifPresentOrElse(person -> {
+
+			System.out.println("Registro a eliminar");
+			System.out.println(person);
+			repository.delete(person);
+			System.out.println("Registro eliminado");
+			
+		}, () -> {
+			System.out.println("No existe el registro con el ID: " + id);
+		});
+		list();
+		scanner.close();
+	}
+	@Transactional
+	public void deleteById(){
+		list();
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Ingrese el ID del registro a eliminar");
+		Long id = scanner.nextLong();
+		Optional<Person> optionalPerson = repository.findById(id);
+		optionalPerson.ifPresentOrElse(person -> {
+
+			System.out.println("Registro a eliminar");
+			System.out.println(person);
+			repository.deleteById(id);
+			System.out.println("Registro eliminado");
+			list();
+		}, () -> {
+			System.out.println("No existe el registro con el ID: " + id);
+		});
+		scanner.close();
 	}
 
 	@Transactional
 	public void update() {
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Ingrese el ID");
+		System.out.println("Ingrese el ID del registro a actualizar");
 		Long id = scanner.nextLong();
 		Optional<Person> optionalPerson = repository.findById(id);
 
@@ -96,7 +137,7 @@ public class SpringbootJpaApplication implements CommandLineRunner {
 		// List<Person> persons = (List<Person>) repository.findAll();
 		// List<Person> persons = (List<Person>)
 		// repository.buscarByProgrammingLanguage("C#");
-		List<Person> persons = (List<Person>) repository.findByProgrammingLanguageAndName("C#", "Emily");
+		/*List<Person> persons = (List<Person>) repository.findByProgrammingLanguageAndName("C#", "Emily");
 		persons.stream().forEach(person -> System.out.println(person));
 
 		List<Object[]> personData = (List<Object[]>) repository.obtenerPersonData();
@@ -104,7 +145,9 @@ public class SpringbootJpaApplication implements CommandLineRunner {
 
 		List<Object[]> personDataWhere = (List<Object[]>) repository.obtenerPersonData("C#", "Emily");
 		personDataWhere.stream().forEach(person -> System.out.println(person[0] + " es experto en " + person[1]));
-
+		*/
+		List<Person> persons = (List<Person>) repository.findAll();
+		persons.stream().forEach(person -> System.out.println(person));
 	}
 
 }
