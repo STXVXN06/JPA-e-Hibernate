@@ -3,11 +3,40 @@ package com.steven.curso.springboot.jpa.springboot_jpa.repositories;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import com.steven.curso.springboot.jpa.springboot_jpa.dto.PersonDto;
 import com.steven.curso.springboot.jpa.springboot_jpa.entities.Person;
 import java.util.List;
 import java.util.Optional;
 
 public interface PersonRepository extends CrudRepository<Person, Long> {
+
+    @Query("select new Person(upper(p.name),lower(p.lastname)) from Person p ")
+    List<Person> findAllPersonCase();
+
+    @Query("select lower( p.name || ' ' || p.lastname ) from Person p")
+    List<String> findAllFullNameConcatLower();
+
+    @Query("select upper(concat(p.name, ' ', p.lastname )) from Person p")
+    List<String> findAllFullNameConcatUpper();
+
+    // @Query("select concat(p.name, ' ', p.lastname ) from Person p")
+    @Query("select p.name || ' ' || p.lastname from Person p")
+    List<String> findAllFullNameConcat();
+
+    @Query("select count(distinct(p.name)) from Person p")
+    Long findAllNamesCount();
+
+    @Query("select distinct(p.programmingLanguage) from Person p")
+    List<String> findAllProgrammingLanguages();
+
+    @Query("select distinct(p.name) from Person p")
+    List<String> findAllNames();
+
+    @Query("select new com.steven.curso.springboot.jpa.springboot_jpa.dto.PersonDto(p.name, p.lastname) from Person p ")
+    List<PersonDto> findAllPersonDto();
+
+    @Query("select new Person(p.name, p.lastname) from Person p ")
+    List<Person> findAllPerson();
 
     @Query("select p, p.programmingLanguage from Person p ")
     List<Object[]> findAllMixPerson();

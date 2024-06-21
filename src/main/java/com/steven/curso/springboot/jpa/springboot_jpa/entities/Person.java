@@ -21,9 +21,14 @@ public class Person {
     @Column(name = "programming_language")
     private String programmingLanguage;
 
-    public Person() {
+    public Person(String name, String lastname) {
+        this.name = name;
+        this.lastname = lastname;
     }
 
+    public Person() {
+    }
+    
     public Person(Long id, String name, String lastname, String programmingLanguage) {
         this.id = id;
         this.name = name;
@@ -58,7 +63,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "id=" + id + ", name=" + name + ", lastname=" + lastname + ", programmingLanguage="
+        return "id = " + id + ", name = " + name + ", lastname = " + lastname + ", programmingLanguage = "
                 + programmingLanguage;
     }
 

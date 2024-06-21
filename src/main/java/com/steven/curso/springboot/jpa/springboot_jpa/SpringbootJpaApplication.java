@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.steven.curso.springboot.jpa.springboot_jpa.dto.PersonDto;
 import com.steven.curso.springboot.jpa.springboot_jpa.entities.Person;
 import com.steven.curso.springboot.jpa.springboot_jpa.repositories.PersonRepository;
 
@@ -33,12 +34,75 @@ public class SpringbootJpaApplication implements CommandLineRunner {
 		// deleteById();
 		// delete2();
 		// getNameById();
-		obtenerPersonDataList();
+		// obtenerPersonDataList();
+		// personalizedQueries();
+		// personalizedQueriesDistinct();
+		personalizedQueriesConcatUpperLowerLike();
 	}
 
-	@Transactional( readOnly = true)
-	private void personalizedQueries(){
-		
+	@Transactional(readOnly = true)
+	private void personalizedQueriesConcatUpperLowerLike() {
+		linea();
+		list();
+		linea();
+
+		System.out.println("------------- Consulta Concat Name y Lastname -------------");
+		List<String> names = repository.findAllFullNameConcat();
+		names.forEach(name -> System.out.println(name));
+		linea();
+
+		System.out.println("------------- FullName Upper -------------");
+		names = repository.findAllFullNameConcatUpper();
+		names.forEach(name -> System.out.println(name));
+		linea();
+
+		System.out.println("------------- FullName Lower -------------");
+		names = repository.findAllFullNameConcatLower();
+		names.forEach(name -> System.out.println(name));
+		linea();
+
+		System.out.println("------------- FullName Case -------------");
+		List<Person> personsCase = repository.findAllPersonCase();
+		personsCase.forEach(person -> System.out.println(person));
+		linea();
+
+	}
+
+	@Transactional(readOnly = true)
+	private void personalizedQueriesDistinct() {
+		linea();
+		list();
+		linea();
+
+		System.out.println("------------- Consulta Nombres -------------");
+		List<String> names = repository.findAllNames();
+		names.forEach(name -> System.out.println(name));
+		linea();
+
+		System.out.println("------------- Consulta Lenguajes -------------");
+		List<String> languages = repository.findAllProgrammingLanguages();
+		languages.forEach(language -> System.out.println(language));
+		linea();
+
+		System.out.println("------------- Consulta Cantidad Nombres -------------");
+		Long countNames = repository.findAllNamesCount();
+		System.out.println("Cantidad de nombres: " + countNames);
+		linea();
+	}
+
+	@Transactional(readOnly = true)
+	private void personalizedQueries() {
+		System.out.println("------------- Consulta por objeto Persona y Lenguaje de Programacion -------------");
+		List<Object[]> persons = repository.findAllMixPerson();
+		persons.forEach(person -> System.out.println("Lenguaje: " + person[1] + " || Objeto: " + person[0]));
+
+		System.out.println("------------- Consulta instanciando entidad en el query -------------");
+		List<Person> personsEntity = repository.findAllPerson();
+		personsEntity.forEach(person -> System.out.println(person));
+
+		System.out.println("------------- Consulta instanciando DTO en el query -------------");
+		List<PersonDto> personsDto = repository.findAllPersonDto();
+		personsDto.forEach(person -> System.out.println(person));
 	}
 
 	@Transactional(readOnly = true)
@@ -48,10 +112,9 @@ public class SpringbootJpaApplication implements CommandLineRunner {
 		linea();
 		List<Object[]> persons = repository.obtenerPersonDataList();
 		persons.forEach(per -> System.out.println("Id: " + per[0] + " Name: " + per[1] +
-													" Programming Language: " + per[2] ));
+				" Programming Language: " + per[2]));
 		linea();
 	}
-
 
 	@Transactional(readOnly = true)
 	private void getNameById() {
@@ -63,9 +126,9 @@ public class SpringbootJpaApplication implements CommandLineRunner {
 		scanner.close();
 
 		String name = repository.getFullName(id);
-		if (name == null ) {
+		if (name == null) {
 			System.out.println("No existe un registro con el ID '" + id + "'");
-		}else{
+		} else {
 			System.out.println("El ID '" + id + "' pertenece a " + name);
 		}
 		linea();
