@@ -31,11 +31,48 @@ public class SpringbootJpaApplication implements CommandLineRunner {
 		// create();
 		// update();
 		// deleteById();
-		delete2();
+		// delete2();
+		// getNameById();
+		obtenerPersonDataList();
+	}
+
+	@Transactional( readOnly = true)
+	private void personalizedQueries(){
+		
+	}
+
+	@Transactional(readOnly = true)
+	private void obtenerPersonDataList() {
+		linea();
+		list();
+		linea();
+		List<Object[]> persons = repository.obtenerPersonDataList();
+		persons.forEach(per -> System.out.println("Id: " + per[0] + " Name: " + per[1] +
+													" Programming Language: " + per[2] ));
+		linea();
+	}
+
+
+	@Transactional(readOnly = true)
+	private void getNameById() {
+		list();
+		linea();
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Ingrese el ID del registro para ver el nombre");
+		Long id = scanner.nextLong();
+		scanner.close();
+
+		String name = repository.getFullName(id);
+		if (name == null ) {
+			System.out.println("No existe un registro con el ID '" + id + "'");
+		}else{
+			System.out.println("El ID '" + id + "' pertenece a " + name);
+		}
+		linea();
 	}
 
 	@Transactional
-	public void delete2(){
+	public void delete2() {
 		list();
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Ingrese el ID del registro a eliminar");
@@ -47,15 +84,16 @@ public class SpringbootJpaApplication implements CommandLineRunner {
 			System.out.println(person);
 			repository.delete(person);
 			System.out.println("Registro eliminado");
-			
+
 		}, () -> {
 			System.out.println("No existe el registro con el ID: " + id);
 		});
 		list();
 		scanner.close();
 	}
+
 	@Transactional
-	public void deleteById(){
+	public void deleteById() {
 		list();
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Ingrese el ID del registro a eliminar");
@@ -137,17 +175,27 @@ public class SpringbootJpaApplication implements CommandLineRunner {
 		// List<Person> persons = (List<Person>) repository.findAll();
 		// List<Person> persons = (List<Person>)
 		// repository.buscarByProgrammingLanguage("C#");
-		/*List<Person> persons = (List<Person>) repository.findByProgrammingLanguageAndName("C#", "Emily");
-		persons.stream().forEach(person -> System.out.println(person));
-
-		List<Object[]> personData = (List<Object[]>) repository.obtenerPersonData();
-		personData.stream().forEach(person -> System.out.println(person[0] + " es experto en " + person[1]));
-
-		List<Object[]> personDataWhere = (List<Object[]>) repository.obtenerPersonData("C#", "Emily");
-		personDataWhere.stream().forEach(person -> System.out.println(person[0] + " es experto en " + person[1]));
-		*/
+		/*
+		 * List<Person> persons = (List<Person>)
+		 * repository.findByProgrammingLanguageAndName("C#", "Emily");
+		 * persons.stream().forEach(person -> System.out.println(person));
+		 * 
+		 * List<Object[]> personData = (List<Object[]>) repository.obtenerPersonData();
+		 * personData.stream().forEach(person -> System.out.println(person[0] +
+		 * " es experto en " + person[1]));
+		 * 
+		 * List<Object[]> personDataWhere = (List<Object[]>)
+		 * repository.obtenerPersonData("C#", "Emily");
+		 * personDataWhere.stream().forEach(person -> System.out.println(person[0] +
+		 * " es experto en " + person[1]));
+		 */
 		List<Person> persons = (List<Person>) repository.findAll();
 		persons.stream().forEach(person -> System.out.println(person));
+	}
+
+	public void linea() {
+
+		System.out.println("------------------------------------------------");
 	}
 
 }
