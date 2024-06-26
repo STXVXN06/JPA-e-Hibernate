@@ -10,6 +10,51 @@ import java.util.Optional;
 
 public interface PersonRepository extends CrudRepository<Person, Long> {
 
+    @Query("select p from Person p where p.id not in ?1")
+    List<Person> getPersonsByIds(List<Long> ids);
+
+    @Query("select p from Person p where p.id = (select max(subp.id) from Person subp)")
+    Optional<Person> getUltimoRegistro();
+
+    @Query("select p.name, length(p.name) from Person p where length(p.name) = (select max(length(subp.name)) from Person subp)")
+    List<Object[]> getNameMaxLengthSubQuery();
+
+    @Query("select min(p.id), max(p.id), sum(p.id), avg(length(p.name)), count(p.id) from Person p")
+    Object getResumenFuncionesAgregacion();
+
+    @Query("select min(length(p.name)) from Person p ")
+    Integer getNameMinLength();
+
+    @Query("select max(length(p.name)) from Person p ")
+    Integer getNameMaxLength();
+
+    @Query("select p.name, length(p.name) from Person p")
+    List<Object[]> getAllLength();
+
+    @Query("select max(p.id) from Person p")
+    Long findMaxId();
+
+    @Query("select min(p.id) from Person p")
+    Long findMinId();
+
+    @Query("select count(p) from Person p")
+    Long countReg();
+
+    List<Person> findAllByOrderByNameAscLastnameDesc();
+
+    List<Person> findByIdBetweenOrderByNameDesc(Long id1, Long id2);
+
+    @Query("select p from Person p order by p.name, p.lastname desc")
+    List<Person> findAllOrderBy();
+
+    List<Person> findByNameBetween(String rangoInicial, String rangoFinal);
+
+    @Query("select p from Person p where p.name between 'K' and 'T'")
+    List<Person> findAllBetweenName();
+
+    @Query("select p from Person p where p.id between 2 and 5")
+    List<Person> findAllBetweenId();
+
     @Query("select new Person(upper(p.name),lower(p.lastname)) from Person p ")
     List<Person> findAllPersonCase();
 

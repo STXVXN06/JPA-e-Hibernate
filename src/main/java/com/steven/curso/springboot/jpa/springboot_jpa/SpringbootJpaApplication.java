@@ -1,5 +1,7 @@
 package com.steven.curso.springboot.jpa.springboot_jpa;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -30,14 +32,155 @@ public class SpringbootJpaApplication implements CommandLineRunner {
 		// findOne();
 		// list();
 		// create();
-		// update();
+		update();
 		// deleteById();
 		// delete2();
 		// getNameById();
 		// obtenerPersonDataList();
 		// personalizedQueries();
 		// personalizedQueriesDistinct();
-		personalizedQueriesConcatUpperLowerLike();
+		// personalizedQueriesConcatUpperLowerLike();
+		// between();
+		// orderBy();
+		// countMaxMin();
+		// length();
+		// getResumenFuncionesAgregacion();
+		// subQuery();
+		// whereIn();
+	}
+
+	@Transactional(readOnly = true)
+	private void whereIn() {
+		linea();
+		list();
+		linea();
+
+		System.out.println("------------- Consulta WHERE IN  -------------");
+		List<Person> persons = repository.getPersonsByIds(Arrays.asList(1L, 2L, 5L, 10L));
+		persons.forEach(p -> System.out.println(p.getName() + " || ID: " + p.getId()));
+		linea();
+
+	}
+
+	@Transactional(readOnly = true)
+	private void subQuery() {
+		linea();
+		list();
+		linea();
+
+		System.out.println("------------- Consulta Length  -------------");
+		List<Object[]> personLength = repository.getAllLength();
+		personLength.forEach(p -> System.out.println(p[0] + " || Length: " + p[1]));
+		linea();
+
+		System.out.println("------------- Subquery  Nombre mas Largo-------------");
+		List<Object[]> result = repository.getNameMaxLengthSubQuery();
+		result.forEach(res -> System.out.println(res[0] + " - Length: " + res[1]));
+		linea();
+
+		System.out.println("------------- Subquery Ultimo Registro  -------------");
+		Optional<Person> person = repository.getUltimoRegistro();
+		person.ifPresent(p -> System.out.println(p));
+		linea();
+	}
+
+	@Transactional(readOnly = true)
+	private void getResumenFuncionesAgregacion() {
+		linea();
+		list();
+		linea();
+
+		System.out.println("------------- Resumen Consultas de Agregacion  -------------");
+		Object[] result = (Object[]) repository.getResumenFuncionesAgregacion();
+		System.out.println("MIN ID: " + result[0]);
+		System.out.println("MAX ID: " + result[1]);
+		System.out.println("SUM ID: " + result[2]);
+		System.out.println("Promedio cantidad de caracteres en Name: " + result[3]);
+		System.out.println("Cantidad de registros: " + result[4]);
+		linea();
+	}
+
+	@Transactional(readOnly = true)
+	private void length() {
+		linea();
+		list();
+		linea();
+
+		System.out.println("------------- Consulta Length  -------------");
+		List<Object[]> personLength = repository.getAllLength();
+		personLength.forEach(p -> System.out.println(p[0] + " || Length: " + p[1]));
+		linea();
+
+		System.out.println("------------- Consulta Name Max Length  -------------");
+		Integer maxLength = repository.getNameMaxLength();
+		System.out.println("Mayor cantidad de caracteres en un Nombre: " + maxLength);
+		linea();
+
+		System.out.println("------------- Consulta Name Min Length  -------------");
+		Integer minLength = repository.getNameMinLength();
+		System.out.println("Menor cantidad de caracteres en un Nombre: " + minLength);
+		linea();
+	}
+
+	@Transactional(readOnly = true)
+	private void countMaxMin() {
+		linea();
+		list();
+		linea();
+
+		System.out.println("------------- Consulta COUNT  -------------");
+		Long countReg = repository.countReg();
+		System.out.println("Cantidad de registros: " + countReg);
+		linea();
+
+		System.out.println("------------- Consulta MIN  -------------");
+		Long minId = repository.findMinId();
+		System.out.println("Id menor: " + minId);
+		linea();
+
+		System.out.println("------------- Consulta MAX  -------------");
+		Long maxId = repository.findMaxId();
+		System.out.println("Id mayor: " + maxId);
+		linea();
+	}
+
+	@Transactional(readOnly = true)
+	private void orderBy() {
+		linea();
+		list();
+		linea();
+
+		System.out.println("------------- Consulta Order by  -------------");
+		List<Person> persons = repository.findAllOrderBy();
+		persons.forEach(person -> System.out.println(person));
+		linea();
+
+		System.out.println("------------- Consulta Order by Query Method  -------------");
+		persons = repository.findAllByOrderByNameAscLastnameDesc();
+		persons.forEach(person -> System.out.println(person));
+		linea();
+	}
+
+	@Transactional(readOnly = true)
+	private void between() {
+		linea();
+		list();
+		linea();
+
+		System.out.println("------------- Consulta BETWEEN ID -------------");
+		List<Person> persons = repository.findAllBetweenId();
+		persons.forEach(person -> System.out.println(person));
+		linea();
+
+		System.out.println("------------- Consulta BETWEEN name -------------");
+		persons = repository.findAllBetweenName();
+		persons.forEach(person -> System.out.println(person));
+		linea();
+
+		System.out.println("------------- Consulta BETWEEN con Query Method -------------");
+		persons = repository.findByNameBetween("K", "SS");
+		persons.forEach(person -> System.out.println(person));
+		linea();
 	}
 
 	@Transactional(readOnly = true)
@@ -252,6 +395,7 @@ public class SpringbootJpaApplication implements CommandLineRunner {
 		 * personDataWhere.stream().forEach(person -> System.out.println(person[0] +
 		 * " es experto en " + person[1]));
 		 */
+		System.out.println("------------- LISTA COMPLETA -------------");
 		List<Person> persons = (List<Person>) repository.findAll();
 		persons.stream().forEach(person -> System.out.println(person));
 	}
